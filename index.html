@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitehub | Premium Online Canteen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e63946;
+            --secondary: #457b9d;
+            --dark: #1d3557;
+            --light: #f1faee;
+            --accent: #a8dadc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+
+        body { background-color: #fff; color: var(--dark); line-height: 1.6; }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1.2rem 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-size: 1.8rem; font-weight: 700; color: var(--primary); letter-spacing: -1px; }
+        .nav-links span { margin-left: 30px; cursor: pointer; font-weight: 600; transition: 0.3s; font-size: 0.95rem; }
+        .nav-links span:hover { color: var(--primary); }
+
+        /* Page Handling */
+        .page-section { display: none; min-height: 100vh; }
+        .active { display: block; animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* HOME PAGE - Full Hero */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), 
+                        url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 4rem; font-weight: 800; margin-bottom: 15px; }
+        .hero p { font-size: 1.3rem; max-width: 700px; margin-bottom: 30px; opacity: 0.9; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            padding: 80px 10%;
+            background: var(--light);
+            text-align: center;
+        }
+
+        .feature-box { padding: 30px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+
+        /* MENU SECTION */
+        .menu-container { padding: 60px 8%; }
+        .category-title { 
+            margin: 40px 0 20px; 
+            padding-bottom: 10px; 
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        @media (max-width: 1024px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .food-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .food-card:hover { transform: scale(1.03); }
+        .food-img { height: 200px; width: 100%; object-fit: cover; }
+        .food-info { padding: 20px; }
+        .price { color: var(--primary); font-weight: 700; font-size: 1.3rem; margin: 10px 0; }
+
+        /* FOOTER */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 10% 20px;
+            margin-top: 50px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo { font-size: 1.5rem; color: var(--primary); margin-bottom: 15px; font-weight: 700; }
+        .footer-col h4 { margin-bottom: 20px; font-size: 1.1rem; }
+        .footer-col p, .footer-col li { color: #bdc3c7; font-size: 0.9rem; margin-bottom: 10px; list-style: none; }
+
+        .rating-box { color: #f1c40f; font-size: 1.2rem; }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn:hover { background: #c1121f; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4); }
+
+        /* CART & CHECKOUT */
+        .cart-box { max-width: 800px; margin: 40px auto; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Bitehub.</div>
+    <div class="nav-links">
+        <span onclick="showPage('home')">HOME</span>
+        <span onclick="showPage('menu')">OUR MENU</span>
+        <span onclick="showPage('cart')">CART (<span id="cart-count">0</span>)</span>
+    </div>
+</nav>
+
+<section id="home" class="page-section active">
+    <div class="hero">
+        <h1>Delicious Meals, <br>Zero Wait Time.</h1>
+        <p>The smartest way to order from your college canteen. Hot food, fresh ingredients, and lightning-fast pickup.</p>
+        <button class="btn" onclick="sign_in()">Sign In</button><br><br>
+        <button class="btn" onclick="showPage('menu')">Order Now</button>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-box">
+            <h3>⚡ Instant Pickup</h3>
+            <p>Skip the long queues and pick up your meal as soon as it's ready.</p>
+        </div>
+        <div class="feature-box">
+            <h3>🥘 Fresh Quality</h3>
+            <p>Our chefs use locally sourced ingredients for every single dish.</p>
+        </div>
+        <div class="feature-box">
+            <h3>💳 Easy Payment</h3>
+            <p>Pay via UPI, Cards, or your Student Wallet seamlessly.</p>
+        </div>
+    </div>
+</section>
+
+<section id="menu" class="page-section menu-container">
+    <h1 style="text-align: center; font-size: 2.5rem;">Explore Our Flavors</h1>
+
+    <h2 class="category-title">Spicy Delights</h2>
+    <div class="menu-grid">
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/shutterstock/photos/2508474945/display_1500/stock-photo-selective-focus-of-vada-pav-india-s-popular-spicy-potato-sandwich-with-chutneys-fried-delight-2508474945.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Vadapav</h3>
+                <p>Spicy Vadapav with fried cillis and chuteny.</p>
+                <p class="price">₹ 15</p>
+                <button class="btn" onclick="addToCart('Vadapav', 15)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://media.istockphoto.com/id/1430060145/photo/sweet-tasty-fried-indian-dish-samosha-indian-delicious-deep-fried-breakfast-samosa-also-know.jpg?s=612x612&w=0&k=20&c=bxOAfJThGKNSzugC7Id_vPO9l5UPljCKSgOc18-2vS0=" class="food-img">
+            <div class="food-info">
+                <h3>Samosa</h3>
+                <p>Classic street-style Samosa.</p>
+                <p class="price">₹15</p>
+                <button class="btn" onclick="addToCart('Samosa', 15)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/potato-patties-served-ketchup-plate-600nw-2260992581.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Patis</h3>
+                <p>Deep-fried Patis in soy-garlic sauce.</p>
+                <p class="price">₹20</p>
+                <button class="btn" onclick="addToCart('Patis', 20)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/medu-vada-popular-south-indian-260nw-2555090653.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Medu Vada</h3>
+                <p>Healthy Medu Vada with spicy Sambar</p>
+                <p class="price">₹40</p>
+                <button class="btn" onclick="addToCart('Medu Vada', 40)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/south-indian-breakfast-food-idli-260nw-2464099789.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Idali</h3>
+                <p>Healthy Idali with spicy Sambar and Coconut Chutney</p>
+                <p class="price">₹40</p>
+                <button class="btn" onclick="addToCart('Idali', 40)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/poha-indian-breakfast-food-top-260nw-2679750395.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Kande Poha</h3>
+                <p>Flavorful Kande Poha with Shev</p>
+                <p class="price">₹40</p>
+                <button class="btn" onclick="addToCart('Kande Poha', 40)">Add To Cart</button>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="menu-grid">
+
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/upma-uppumavu-uppittu-indian-popular-260nw-2099968972.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Upith</h3>
+                <p>Fluppy Upith</p>
+                <p class="price">₹50</p>
+                <button class="btn" onclick="addToCart('Upith', 50)">Add To Cart</button>
+            </div>
+        </div>
+
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/side-view-isometric-angle-crispy-600nw-2600398075.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Dosa</h3>
+                <p>Delicious South Indian Dosa</p>
+                <p class="price">₹70</p>
+                <button class="btn" onclick="addToCart('Dosa', 70)">Add To Cart</button>
+            </div>
+        </div>
+
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/crispy-kanda-bhajibhajji-pyaj-pakode-260nw-438755476.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Kanda Bhaji</h3>
+                <p>Crispy Kanda Bhaji.</p>
+                <p class="price">₹30</p>
+                <button class="btn" onclick="addToCart('Kanda Bhaji', 30)">Add To Cart</button>
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <div class="menu-grid">
+        <div class="food-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEIR0r7aAp-Xy0fg2MtC4ZdY55S1MiNt6U1g&s" class="food-img">
+            <div class="food-info">
+                <h3>Chapati Bhaji</h3>
+                <p class="price">₹ 50</p>
+                <button class="btn" onclick="addToCart('Chapati Bhaji', 50)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/arhar-dal-rice-indian-dish-600nw-2389357495.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Dal rice</h3>
+                <p class="price">₹40</p>
+                <button class="btn" onclick="addToCart('Dal rice', 40)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/chicken-fried-rice-schezwan-spicy-260nw-2502332081.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Schezwan Rice</h3>
+                <p class="price">₹60</p>
+                <button class="btn" onclick="addToCart('Schezwan Rice', 60)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/closeup-shot-paneer-schezwan-noodles-260nw-2634418209.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Schezwan Noodles</h3>
+                <p class="price">₹70</p>
+                <button class="btn" onclick="addToCart('Schezwan Noodles', 70)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/mattar-paneer-cottage-cheese-peas-260nw-2472690553.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Paneer Bhaji</h3>
+                <p class="price">₹60</p>
+                <button class="btn" onclick="addToCart('Paneer Bhaji', 60)">Add To Cart</button>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/shutterstock/photos/2115942497/display_1500/stock-photo-sabudana-khichdi-sabudana-khichri-tapioca-pearls-cassava-sago-khichdi-mahashivratri-shivratri-2115942497.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Sabudana Khichadi</h3>
+                <p class="price">₹40</p>
+                <button class="btn" onclick="addToCart('Sabudana Khichadi', 40)">Add To Cart</button>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="menu-grid">
+
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/shutterstock/photos/1976558531/display_1500/stock-photo-spicy-misal-pav-or-usal-pav-is-a-traditional-snack-or-chaat-food-from-maharashtra-india-served-1976558531.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Misal Pav</h3>
+                <p class="price">₹40</p>
+                <button class="btn" onclick="addToCart('Misal Pav', 40)">Add To Cart</button>
+            </div>
+        </div>
+
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/veg-biryani-handi-raita-on-600w-2439405229.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Veg Biryani</h3>
+                <p class="price">₹70</p>
+                <button class="btn" onclick="addToCart('Veg Biryani', 70)">Add To Cart</button>
+            </div>
+        </div>
+
+        <div class="food-card">
+            <img src="https://www.shutterstock.com/image-photo/poznan-poland-oct-28-2021-260nw-2075670211.jpg" class="food-img">
+            <div class="food-info">
+                <h3>Cold Drinks</h3>
+                <p>Crispy Kanda Bhaji.</p>
+                <p class="price">₹20</p>
+                <button class="btn" onclick="addToCart('Cold Drinks', 20)">Add To Cart</button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section id="cart" class="page-section">
+    <div class="cart-box">
+        <h2>Your Selected Delights</h2>
+        <div id="cart-items-list" style="margin-top: 20px;">
+            </div>
+        <div style="text-align: right; margin-top: 30px;">
+            <h3>Total Amount: ₹<span id="cart-total">0.00</span></h3>
+            <button class="btn" style="margin-top: 20px;" onclick="showPage('checkout')">Proceed to Checkout</button>
+        </div>
+    </div>
+</section>
+
+<section id="checkout" class="page-section">
+    <div class="cart-box" style="max-width: 600px;">
+        <h2>Checkout Information</h2>
+        <input type="text" id="custName" placeholder="Your Name" style="width:100%; padding:12px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
+        <input type="text" id="stuID" placeholder="Student ID Number" style="width:100%; padding:12px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
+        <p style="margin: 15px 0 5px;"><strong>Payment Method</strong></p>
+        <select style="width:100%; padding:12px; border-radius:8px; border:1px solid #ddd;">
+            <option>Campus Wallet (Balance: ₹5000.00)</option>
+            <option>UPI / PhonePe / GPay</option>
+            <option>Debit Card</option>
+        </select>
+        <button class="btn" style="width: 100%; margin-top: 30px;" onclick="processOrder()">Confirm & Pay</button>
+    </div>
+</section>
+<section id="receipt" class="page-section">
+    <div class="cart-box" style="max-width:600px; text-align:center;">
+        <h2>Payment Receipt</h2>
+        <p><strong>Customer:</strong> <span id="rName"></span></p>
+        <p><strong>Student ID:</strong> <span id="rID"></span></p>
+        <p><strong>Items:</strong></p>
+        <div id="rItems" style="margin:10px 0;"></div>
+        <h3>Total Amount: ₹<span id="rTotal"></span></h3>
+        <p><strong>Date:</strong> <span id="rDate"></span></p>
+
+        <button class="btn" onclick="showPage('home')" style="margin-top:20px;">Back to Home</button>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <div class="footer-logo">Bitehub.</div>
+            <p>Solving canteen hunger since 2026. Your go-to solution for healthy and fast campus meals.</p>
+            <div class="rating-box">
+                Rating: ★★★★☆ (4.8/5)
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li onclick="showPage('home')" style="cursor:pointer">Home</li>
+                <li onclick="showPage('menu')" style="cursor:pointer">Menu</li>
+                <li>Terms of Service</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Contact Support</h4>
+            <p>📧 bitehub@gmail.com</p>
+            <p>📞 +91 7507102181</p>
+            <p>📞 +91 7276516040</p>
+            <p>📍 Center, MMIT Campus</p>
+        </div>
+    </div>
+    <hr style="opacity: 0.1;">
+    <p style="text-align: center; margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">&copy; 2026 Bitehub Inc. All rights reserved.</p>
+</footer>
+
+<script>
+    let cart = [];
+    let total = 0;
+
+    function showPage(pageId) {
+        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function addToCart(name, price) {
+        cart.push({name, price});
+        total += price;
+        updateUI();
+        alert(name + " added!");
+    }
+
+    function updateUI() {
+        document.getElementById('cart-count').innerText = cart.length;
+        const list = document.getElementById('cart-items-list');
+        list.innerHTML = cart.length === 0 ? "<p>Your cart is empty.</p>" : "";
+        
+        cart.forEach(item => {
+            list.innerHTML += `<div class="cart-item"><span>₹${item.name}</span><strong>₹${item.price.toFixed(2)}</strong></div>`;
+        });
+        document.getElementById('cart-total').innerText = total.toFixed(2);
+    }
+
+    function processOrder() {
+    const name = document.getElementById('custName').value;
+    const id = document.getElementById('stuID').value;
+
+    if (!name) { alert("Please enter your name!"); return; }
+    if (!id) { alert("Please enter Student ID!"); return; }
+    if (cart.length === 0) { alert("Cart is empty!"); return; }
+
+    // Fill Receipt Data
+    document.getElementById("rName").innerText = name;
+    document.getElementById("rID").innerText = id;
+
+    let listHTML = "";
+    cart.forEach(item => {
+        listHTML += `<p>${item.name} - ₹${item.price}</p>`;
+    });
+    document.getElementById("rItems").innerHTML = listHTML;
+
+    document.getElementById("rTotal").innerText = total.toFixed(2);
+    document.getElementById("rDate").innerText = new Date().toLocaleString();
+
+    // Clear Cart
+    cart = [];
+    total = 0;
+    updateUI();
+
+    // Show receipt page
+    showPage("receipt");
+    }
+    function sign_in(){
+        alert("You Sign in successfully!");
+    }
+</script>
+
+</body>
+</html>
